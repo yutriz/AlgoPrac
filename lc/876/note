@@ -1,0 +1,9 @@
+using 2 pointers
+    p1 goes 1 stride 
+    p2 goes 2 stride 
+    when p2 = NULL, p1 = middle 
+
+if trisection 
+    stride = 3 ? 
+
+....
