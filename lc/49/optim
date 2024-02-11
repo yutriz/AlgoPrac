@@ -1,0 +1,5 @@
+sort string 
+    usually string.len isn't that big 
+    sort can save lots of time { to calculate the hash value, comparing "000...1.1.0"(len=26) and "str"(len=3) }
+    
+    
