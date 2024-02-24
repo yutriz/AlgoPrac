@@ -1,0 +1,4 @@
+1-1
+    inbound:  sum(Adj[i].size) 
+    outbound: Adj[u].size
+
