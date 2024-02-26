@@ -8,6 +8,5 @@ int main(){
     weighted_graph wg(4);
     wg.read_adj_list(data);
     wg.bfs(1);
-    wg.print_adj_matrix(data);
     std::cout<< "done\n";
 }

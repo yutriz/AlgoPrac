@@ -1,30 +1,37 @@
 #include <list>
 #include <queue>
 #include <vector>
+
 #include <string.h>
 
 #include "misc.hpp"
 
-using namespace std;
+#define DINF 33333 /* infinite distance */
 
+using namespace std;
 
 /* 
  * directed or undirected
  * current: directed graph without loop
  */
 class graph {
-  public:
-    const int n_vertex;
-    void *adj_list;
-    
-    graph(int n):n_vertex(n){}
-
-    void read_adj_list(vector<vector<int>>);    
-    void print_adj_matrix(vector<vector<int>>);
-    void bfs(int src);
-    
-
-    void topological_sort();
+    public:
+        const int n_vertex;
+        void *adj_list;
+        
+        graph(int n):n_vertex(n){}
+        
+        /* */
+        void read_adj_list(vector<vector<int>>);    
+        void print_adj_list();
+        void print_adj_matrix(vector<vector<int>>);
+         
+        /* search */
+        void bfs(int src);
+        void dfs(int src); 
+        
+        /* advance */
+        void topological_sort();
 
 };
 
@@ -34,20 +41,44 @@ struct weighted_list {
 };
 
 class weighted_graph: public graph {
-  public:
-    weighted_graph(int n):graph(n){};
-    void read_adj_list(vector<vector<int>>);    
-    void print_adj_matrix(vector<vector<int>>);
-    void bfs(int src);
+    public:
+        weighted_graph(int n):graph(n){};
+        void read_adj_list(vector<vector<int>>);    
+        void print_adj_list();
+        void print_adj_matrix(vector<vector<int>>);
+        void bfs(int src);
+        void dfs(int src);
 };
 
+void graph::print_adj_list(){
+    list<int> *li = (list<int>*) adj_list;
+    cout << "printing adjacency list:" << endl;
+    for(auto iter=li->begin(); iter!=li->end(); iter++) {
+        
+        
+    }
+}
+
+void graph::print_adj_matrix(vector<vector<int>> edges) {
+    int **matrix;
+    matrix = new int*[n_vertex];
+    for(int i=0; i<n_vertex; i++)
+        matrix[i] = new int[n_vertex];
+    
+    for(int i=0; (size_t)i<edges.size(); i++) {
+        int src = edges[i][0];
+        int dst = edges[i][1];
+        matrix[src][dst] = 1;
+    }
+    print_c_matrix(matrix, n_vertex, n_vertex);
+}
 
 void weighted_graph::print_adj_matrix(vector<vector<int>> edges) {
     int **matrix;
     matrix = new int*[n_vertex];
     for(int i=0; i<n_vertex; i++)
         matrix[i] = new int[n_vertex];
-    cout << "before read\n";
+    
     for(int i=0; (size_t)i<edges.size(); i++) {
         int src = edges[i][0];
         int dst = edges[i][1];
@@ -55,6 +86,7 @@ void weighted_graph::print_adj_matrix(vector<vector<int>> edges) {
     }
     print_c_matrix(matrix, n_vertex, n_vertex);
 }
+
 
 /*
  * [[0,1,100],[1,2,100],[2,0,100],[1,3,600],[2,3,200]]
@@ -98,12 +130,13 @@ void graph::bfs(int src) {
     queue<int> q;
     q.push(src);
 
+    list<int> *lip = (list<int>*) adj_list;  
     while(!q.empty()) {
         int n_cur = q.front();
         q.pop();
         
-        list<int> *li = (list<int>*) adj_list;  
-        for(auto iter=li->begin(); iter!=li->end(); iter++) {
+        list<int> li = lip[n_cur];  
+        for(auto iter=li.begin(); iter!=li.end(); iter++) {
             if(color[*iter]==0){
                 color[*iter] = 1;
                 dstc[*iter] = dstc[n_cur] + 1;
@@ -123,7 +156,7 @@ void weighted_graph::bfs(int src) {
     int  dstc[n_vertex]; /* distance */
     int  pred[n_vertex]; /* predecessor */
     memset(color, 0, n_vertex*sizeof(char));
-    memset(dstc, 0, n_vertex*sizeof(int));
+    memset(dstc, DINF, n_vertex*sizeof(int));
     memset(pred, 0, n_vertex*sizeof(int));
 
     color[src] = 1;
@@ -133,21 +166,29 @@ void weighted_graph::bfs(int src) {
     queue<int> q;
     q.push(src);
 
+    list<weighted_list> *lwp = (list<weighted_list>*) adj_list;  
     while(!q.empty()) {
         int n_cur = q.front();
         q.pop();
         
-        list<weighted_list> *li = (list<weighted_list>*) adj_list;  
-        for(auto iter=li->begin(); iter!=li->end(); iter++) {
-            cout << "current to_node " << iter->to_node << endl;
+        list<weighted_list> lw = lwp[n_cur];
+        for(auto iter=lw.begin(); iter!=lw.end(); iter++) {
             if(color[iter->to_node]==0){
                 color[iter->to_node] = 1;
-                dstc[iter->to_node] = dstc[n_cur] + iter->weight;
                 pred[iter->to_node] = n_cur;
+                if(int j=dstc[n_cur]+iter->weight; j<dstc[iter->to_node])
+                    dstc[iter->to_node] = j;
+            
                 q.push(iter->to_node);
             }
         }
         color[n_cur] = 2;
     }
     print_c_array(dstc, n_vertex);
+}
+
+
+void graph::dfs(int src) {
+    /* do */
+
 }
