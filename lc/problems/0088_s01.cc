@@ -51,6 +51,7 @@ int main() {
     vector<int> v{0,0,0,1,2};
     vector<int> v11{1,2,3};
     vector<int> v12{2,5,6};
+    cout << binary_search(v,0,4,3) << endl;
     merge(v11,3,v12,0);    
     print_vector(v11);
 }
