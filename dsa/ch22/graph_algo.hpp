@@ -4,7 +4,6 @@
 
 #include <string.h>
 
-#include "misc.hpp"
 
 #define DINF 33333 /* infinite distance */
 
@@ -15,23 +14,23 @@ using namespace std;
  * current: directed graph without loop
  */
 class graph {
-    public:
-        const int n_vertex;
-        void *adj_list;
+public:
+    const int n_vertex;
+    void *adj_list;
         
-        graph(int n):n_vertex(n){}
+    graph(int n):n_vertex(n){}
         
-        /* */
-        void read_adj_list(vector<vector<int>>);    
-        void print_adj_list();
-        void print_adj_matrix(vector<vector<int>>);
+    /* */
+    void read_adj_list(vector<vector<int>>) const;    
+    void print_adj_list() const;
+    void print_adj_matrix(vector<vector<int>>) const;
          
-        /* search */
-        void bfs(int src);
-        void dfs(int src); 
+    /* search */
+    void bfs(int src);
+    void dfs(int src); 
         
-        /* advance */
-        void topological_sort();
+    /* advance */
+    virtual void topological_sort();
 
 };
 
