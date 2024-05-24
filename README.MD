@@ -1,1 +1,1 @@
-# AlgorithmsPRAC
+# DSA Practice
